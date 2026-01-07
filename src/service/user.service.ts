@@ -1,5 +1,5 @@
 import { logger } from "../config/Logger.js";
-import { UserInterface, UserModel } from "../models/User.js";
+import { UserInterface, UserModel } from "../models/user.model.js";
 import { CreateUserDTO, UpdateUserDTO } from "../types/user.type.js";
 import { AppError } from "../utils/AppError.js";
 
