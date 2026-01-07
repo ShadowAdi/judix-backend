@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { CorsConfig } from "./config/CorsConfig.js";
 import { AppConnect } from "./config/AppConfig.js";
+import { CustomErrorHandler } from "./middlewares/CustomErrorHandler.js";
 
 
 const app = express()
@@ -14,5 +15,7 @@ app.get("/", (request: Request, response: Response) => {
         "success": true
     })
 })
+
+app.use(CustomErrorHandler);
 
 AppConnect(app)
