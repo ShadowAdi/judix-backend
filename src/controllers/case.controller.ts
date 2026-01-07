@@ -4,7 +4,7 @@ import { AppError } from "../utils/AppError.js";
 import { CaseService } from "../service/case.service.js";
 import { UserService } from "../service/user.service.js";
 
-export const CreateCase = CustomTryCatch(async (request: Request, response:Response) => {
+export const CreateCase = CustomTryCatch(async (request: Request, response: Response) => {
     if (!request.user) {
         throw new AppError('User not authenticated', 401);
     }
@@ -13,7 +13,7 @@ export const CreateCase = CustomTryCatch(async (request: Request, response:Respo
     const caseData = request.body
 
 
-    const caseCreated = await CaseService.createCase(caseData,user._id)
+    const caseCreated = await CaseService.createCase(caseData, user._id)
 
     response.status(201).json({
         "success": true,
@@ -22,17 +22,32 @@ export const CreateCase = CustomTryCatch(async (request: Request, response:Respo
     })
 })
 
-export const GetAllUsers = CustomTryCatch(async (request: Request, response:Response) => {
-    const users = await UserService.getAllUsers()
+export const GetAllCases = CustomTryCatch(async (request: Request, response: Response) => {
+    const cases = await CaseService.getAllCases()
 
     response.status(200).json({
         "success": true,
-        "message": "Users Fetched Successfully",
-        "users": users
+        "message": "Cases Fetched Successfully",
+        "cases": cases
     })
 })
 
-export const GetUser = CustomTryCatch(async (request: Request, response:Response) => {
+export const GetUserCases = CustomTryCatch(async (request: Request, response: Response) => {
+    if (!request.user) {
+        throw new AppError('User not authenticated', 401);
+    }
+
+    const user = await UserService.getUser(request.user.id);
+    const cases = await CaseService.getUserCases(user._id)
+
+    response.status(200).json({
+        "success": true,
+        "message": "Cases Fetched Successfully",
+        "cases": cases
+    })
+})
+
+export const GetCase = CustomTryCatch(async (request: Request, response: Response) => {
     const { id } = request.params
     const user = await UserService.getUser(id)
 
@@ -43,7 +58,7 @@ export const GetUser = CustomTryCatch(async (request: Request, response:Response
     })
 })
 
-export const DeleteUser = CustomTryCatch(async (request: Request, response:Response) => {
+export const DeleteUser = CustomTryCatch(async (request: Request, response: Response) => {
     if (!request.user) {
         throw new AppError('User not authenticated', 401);
     }
@@ -56,7 +71,7 @@ export const DeleteUser = CustomTryCatch(async (request: Request, response:Respo
     })
 })
 
-export const UpdateUser = CustomTryCatch(async (request: Request, response:Response) => {
+export const UpdateUser = CustomTryCatch(async (request: Request, response: Response) => {
     if (!request.user) {
         throw new AppError('User not authenticated', 401);
     }
