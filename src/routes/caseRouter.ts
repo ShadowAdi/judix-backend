@@ -21,11 +21,11 @@ caseRouter.get("/user/", authenticateToken, GetUserCases);
 caseRouter.get("/user/:id", authenticateToken, GetCase);
 
 caseRouter.patch(
-    "/",
+    "/:id",
     authenticateToken,
     updateCaseValidator,
     validate,
     UpdateCase
 );
 
-caseRouter.delete("/", authenticateToken, DeleteCase);
+caseRouter.delete("/:id", authenticateToken, DeleteCase);
