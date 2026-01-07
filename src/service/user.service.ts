@@ -3,7 +3,7 @@ import { UserInterface, UserModel } from "../models/User.js";
 import { CreateUserDTO, UpdateUserDTO } from "../types/user.type.js";
 import { AppError } from "../utils/AppError.js";
 
-export class UserService {
+export class UserClassService {
 
     async getAllUsers(): Promise<UserInterface[]> {
         const users = await UserModel.find();
@@ -54,3 +54,5 @@ export class UserService {
         return "User updated successfully";
     }
 }
+
+export const UserService=new UserClassService()
