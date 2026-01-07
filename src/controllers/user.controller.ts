@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CustomTryCatch } from "../utils/CustomTryCatch.js";
 import { UserService } from "../service/user.service.js";
 import { hashPassword } from "../utils/password.js";
+import { AppError } from "../utils/AppError.js";
 
 export const CreateUser = CustomTryCatch(async (request: Request, response:Response) => {
     const { username, email, password, bio } = request.body
@@ -44,8 +45,11 @@ export const GetUser = CustomTryCatch(async (request: Request, response:Response
 })
 
 export const DeleteUser = CustomTryCatch(async (request: Request, response:Response) => {
-    const { id } = request.params
-    const deleteResponse = await UserService.deleteUser(id)
+    if (!request.user) {
+        throw new AppError('User not authenticated', 401);
+    }
+
+    const deleteResponse = await UserService.deleteUser(request.user.id)
 
     response.status(200).json({
         "success": true,
@@ -54,9 +58,13 @@ export const DeleteUser = CustomTryCatch(async (request: Request, response:Respo
 })
 
 export const UpdateUser = CustomTryCatch(async (request: Request, response:Response) => {
-    const { id } = request.params
+    if (!request.user) {
+        throw new AppError('User not authenticated', 401);
+    }
+
     const updateUser = request.body
-    const updateResponse = await UserService.updateUser(id, updateUser)
+
+    const updateResponse = await UserService.updateUser(request.user.id, updateUser)
 
     response.status(200).json({
         "success": true,

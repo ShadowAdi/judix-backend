@@ -43,3 +43,17 @@ export const LoginUser = CustomTryCatch(async (request: Request, response: Respo
         }
     })
 })
+
+export const GetMe = CustomTryCatch(async (request: Request, response: Response) => {
+    if (!request.user) {
+        throw new AppError('User not authenticated', 401);
+    }
+
+    const user = await UserService.getUser(request.user.id);
+
+    response.status(200).json({
+        "success": true,
+        "message": "User Profile Fetched Successfully",
+        "user": user
+    });
+});

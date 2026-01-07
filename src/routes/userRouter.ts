@@ -1,6 +1,7 @@
 import express from "express";
 import { createUserValidator, updateUserValidator } from "../validators/user.validator.js";
 import { validate } from "../middlewares/validator.js";
+import { authenticateToken } from "../middlewares/auth.middleware.js";
 import { CreateUser, DeleteUser, GetAllUsers, GetUser, UpdateUser } from "../controllers/user.controller.js";
 
 export const userRouter = express.Router();
@@ -17,10 +18,11 @@ userRouter.get("/", GetAllUsers);
 userRouter.get("/:id", GetUser);
 
 userRouter.patch(
-    "/:id",
+    "/",
+    authenticateToken,
     updateUserValidator,
     validate,
     UpdateUser
 );
 
-userRouter.delete("/:id", DeleteUser);
+userRouter.delete("/", authenticateToken, DeleteUser);
