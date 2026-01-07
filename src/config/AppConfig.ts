@@ -1,6 +1,7 @@
 import { Express } from "express";
 import { logger } from "./Logger.js";
 import { PORT } from "./DotenvConfig.js";
+import { DBConnect } from "../db/db.js";
 
 export const AppConnect = (app: Express) => {
   try {
@@ -11,6 +12,7 @@ export const AppConnect = (app: Express) => {
         } and you can see here http://localhost:${PORT || 8080}`
       );
     });
+    DBConnect();
   } catch (error) {
     logger.error(`Error in Starting the server at PORT: ${PORT || 8080}`);
     console.error(`Error in Starting the server at PORT: ${PORT || 8080}`);
