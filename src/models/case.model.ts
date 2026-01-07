@@ -18,6 +18,7 @@ const CaseSchema = new mongoose.Schema({
     },
     clientEmail: {
         type: String,
+        trim: true
     },
     caseType: {
         type: String,
