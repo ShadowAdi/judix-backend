@@ -80,7 +80,7 @@ export const DeleteCase = CustomTryCatch(async (request: Request, response: Resp
     })
 })
 
-export const UpdateUser = CustomTryCatch(async (request: Request, response: Response) => {
+export const UpdateCase = CustomTryCatch(async (request: Request, response: Response) => {
         const { id } = request.params
 
     if (!request.user) {
