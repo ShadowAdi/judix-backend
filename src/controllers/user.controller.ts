@@ -3,7 +3,7 @@ import { CustomTryCatch } from "../utils/CustomTryCatch.js";
 import { UserService } from "../service/user.service.js";
 import { hashPassword } from "../utils/password.js";
 
-export const CreateUser = CustomTryCatch(async (request: Request, response) => {
+export const CreateUser = CustomTryCatch(async (request: Request, response:Response) => {
     const { username, email, password, bio } = request.body
 
     const hashedPassword = await hashPassword(password)
@@ -22,7 +22,7 @@ export const CreateUser = CustomTryCatch(async (request: Request, response) => {
     })
 })
 
-export const GetAllUsers = CustomTryCatch(async (request: Request, response) => {
+export const GetAllUsers = CustomTryCatch(async (request: Request, response:Response) => {
     const users = await UserService.getAllUsers()
 
     response.status(200).json({
@@ -32,7 +32,7 @@ export const GetAllUsers = CustomTryCatch(async (request: Request, response) => 
     })
 })
 
-export const GetUser = CustomTryCatch(async (request: Request, response) => {
+export const GetUser = CustomTryCatch(async (request: Request, response:Response) => {
     const { id } = request.params
     const user = await UserService.getUser(id)
 
@@ -43,7 +43,7 @@ export const GetUser = CustomTryCatch(async (request: Request, response) => {
     })
 })
 
-export const DeleteUser = CustomTryCatch(async (request: Request, response) => {
+export const DeleteUser = CustomTryCatch(async (request: Request, response:Response) => {
     const { id } = request.params
     const deleteResponse = await UserService.deleteUser(id)
 
@@ -53,7 +53,7 @@ export const DeleteUser = CustomTryCatch(async (request: Request, response) => {
     })
 })
 
-export const UpdateUser = CustomTryCatch(async (request: Request, response) => {
+export const UpdateUser = CustomTryCatch(async (request: Request, response:Response) => {
     const { id } = request.params
     const updateUser = request.body
     const updateResponse = await UserService.updateUser(id, updateUser)

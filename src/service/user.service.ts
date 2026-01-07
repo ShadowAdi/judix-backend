@@ -53,6 +53,23 @@ export class UserClassService {
 
         return "User updated successfully";
     }
+
+    async findUserWithEmail(
+        email: string
+    ): Promise<UserInterface> {
+        const userFound = await UserModel.findOne(
+            {
+                email
+            }
+        ).select("+password");
+
+        if (!userFound) {
+            logger.error(`User not found with email: ${email}`);
+            throw new AppError("User not found", 404);
+        }
+
+        return userFound;
+    }
 }
 
-export const UserService=new UserClassService()
+export const UserService = new UserClassService()
