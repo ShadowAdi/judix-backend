@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { logger } from "../config/Logger.js";
 import { CaseInterface, CaseModel } from "../models/case.model.js";
 import { CreateCaseDTO, UpdateCaseDTO } from "../types/Case.type.js";
@@ -12,7 +13,7 @@ export class CaseClassService {
         return cases;
     }
 
-    async getUserCases(userId: string): Promise<CaseInterface[]> {
+    async getUserCases(userId: string | Types.ObjectId): Promise<CaseInterface[]> {
         const userCases = await CaseModel.find({
             isArchived: false,
             owner: userId
@@ -20,7 +21,7 @@ export class CaseClassService {
         return userCases;
     }
 
-    async getCase(id: string, userId: string): Promise<CaseInterface> {
+    async getCase(id: string, userId: string | Types.ObjectId): Promise<CaseInterface> {
         const caseData = await CaseModel.findOne({
             _id: id,
             owner: userId
@@ -34,7 +35,7 @@ export class CaseClassService {
         return caseData;
     }
 
-    async createCase(createCaseData: CreateCaseDTO, userId: string): Promise<string> {
+    async createCase(createCaseData: CreateCaseDTO, userId: string | Types.ObjectId): Promise<string> {
         const isCaseExist = await CaseModel.exists({ title: createCaseData.title, owner: userId });
 
         if (isCaseExist) {
@@ -48,8 +49,8 @@ export class CaseClassService {
         return new_case.title;
     }
 
-    async deleteCase(id: string,userId:string): Promise<string> {
-        await this.getCase(id,userId);
+    async deleteCase(id: string, userId: string | Types.ObjectId): Promise<string> {
+        await this.getCase(id, userId);
 
         await CaseModel.findByIdAndDelete(id);
         return "Case deleted successfully";
@@ -58,9 +59,9 @@ export class CaseClassService {
     async updateCase(
         id: string,
         updateCase: UpdateCaseDTO,
-        userId:string
+        userId: string | Types.ObjectId
     ): Promise<string> {
-        await this.getCase(id,userId);
+        await this.getCase(id, userId);
 
         await CaseModel.findByIdAndUpdate(
             id,
@@ -76,7 +77,7 @@ export class CaseClassService {
     ): Promise<CaseInterface> {
         const caseFound = await CaseModel.findOne(
             {
-                title:title
+                title: title
             }
         )
 
