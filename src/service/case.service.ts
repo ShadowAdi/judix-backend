@@ -1,29 +1,28 @@
 import { logger } from "../config/Logger.js";
 import { CaseInterface, CaseModel } from "../models/case.model.js";
-import { UserInterface, UserModel } from "../models/user.model.js";
-import { CreateUserDTO, UpdateUserDTO } from "../types/user.type.js";
+import { CreateCaseDTO, UpdateCaseDTO } from "../types/Case.type.js";
 import { AppError } from "../utils/AppError.js";
 
 export class CaseClassService {
 
     async getAllCases(): Promise<CaseInterface[]> {
         const cases = await CaseModel.find({
-            isArchived:false,
+            isArchived: false,
         });
         return cases;
     }
 
-    async getUserCases(userId:string): Promise<CaseInterface[]> {
+    async getUserCases(userId: string): Promise<CaseInterface[]> {
         const userCases = await CaseModel.find({
-            isArchived:false,
-            owner:userId
+            isArchived: false,
+            owner: userId
         });
         return userCases;
     }
 
-    async getCase(id: string,userId:string): Promise<CaseInterface> {
+    async getCase(id: string, userId: string): Promise<CaseInterface> {
         const caseData = await CaseModel.findOne({
-            _id:id,
+            _id: id,
             owner: userId
         });
 
@@ -35,55 +34,59 @@ export class CaseClassService {
         return caseData;
     }
 
-    async createCase(userData: CreateUserDTO): Promise<string> {
-        const isUserExist = await UserModel.exists({ email: userData.email });
+    async createCase(createCaseData: CreateCaseDTO, userId: string): Promise<string> {
+        const isCaseExist = await CaseModel.exists({ title: createCaseData.title, owner: userId });
 
-        if (isUserExist) {
-            throw new AppError("User with same email already exists", 409);
+        if (isCaseExist) {
+            throw new AppError("Case with same title already exists", 409);
         }
 
-        const user = await UserModel.create(userData);
-        return user.email;
+        const new_case = await CaseModel.create({
+            ...createCaseData,
+            owner: userId
+        });
+        return new_case.title;
     }
 
-    async deleteUser(id: string): Promise<string> {
-        await this.getUser(id);
+    async deleteCase(id: string,userId:string): Promise<string> {
+        await this.getCase(id,userId);
 
-        await UserModel.findByIdAndDelete(id);
-        return "User deleted successfully";
+        await CaseModel.findByIdAndDelete(id);
+        return "Case deleted successfully";
     }
 
-    async updateUser(
+    async updateCase(
         id: string,
-        updateUser: UpdateUserDTO
+        updateCase: UpdateCaseDTO,
+        userId:string
     ): Promise<string> {
-        await this.getUser(id);
+        await this.getCase(id,userId);
 
-        await UserModel.findByIdAndUpdate(
+        await CaseModel.findByIdAndUpdate(
             id,
-            updateUser,
+            updateCase,
             { new: true }
         );
 
-        return "User updated successfully";
+        return "Case updated successfully";
     }
 
-    async findUserWithEmail(
-        email: string
-    ): Promise<UserInterface> {
-        const userFound = await UserModel.findOne(
+    async findCaseWithTitle(
+        title: string
+    ): Promise<CaseInterface> {
+        const caseFound = await CaseModel.findOne(
             {
-                email
+                title:title
             }
-        ).select("+password");
+        )
 
-        if (!userFound) {
-            logger.error(`User not found with email: ${email}`);
-            throw new AppError("User not found", 404);
+        if (!caseFound) {
+            logger.error(`Case not found with title: ${title}`);
+            throw new AppError("Case not found", 404);
         }
 
-        return userFound;
+        return caseFound;
     }
 }
 
-export const UserService = new UserClassService()
+export const CaseService = new CaseClassService()
