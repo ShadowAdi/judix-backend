@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { validationResult, ValidationError } from "express-validator/";
+import { validationResult, ValidationError } from "express-validator";
 
 export const validate = (
   req: Request,
