@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { CorsConfig } from "./config/CorsConfig.js";
 import { AppConnect } from "./config/AppConfig.js";
 import { CustomErrorHandler } from "./middlewares/CustomErrorHandler.js";
