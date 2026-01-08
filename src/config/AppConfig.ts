@@ -1,20 +1,19 @@
 import { Express } from "express";
 import { logger } from "./Logger.js";
-import { PORT } from "./DotenvConfig.js";
 import { DBConnect } from "../db/db.js";
 
 export const AppConnect = (app: Express) => {
+  const port = Number(process.env.PORT) || 8080;
+
   try {
-    app.listen(PORT || 8080, () => {
-      console.log(
-        `Server started at PORT: ${
-          PORT || 8080
-        } and you can see here http://localhost:${PORT || 8080}`
-      );
+    app.listen(port, () => {
+      console.log(`Server started on port ${port}`);
+      logger.info(`Server started on port ${port}`);
     });
+
     DBConnect();
   } catch (error) {
-    logger.error(`Error in Starting the server at PORT: ${PORT || 8080}`);
-    console.error(`Error in Starting the server at PORT: ${PORT || 8080}`);
+    logger.error("Error starting the server", error);
+    console.error("Error starting the server", error);
   }
 };
