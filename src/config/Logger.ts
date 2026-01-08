@@ -1,7 +1,7 @@
 import winston from "winston";
-import path from "path";
+import * as path from "path";
+import * as fs from "fs";
 import { fileURLToPath } from "url";
-import fs from "fs";
 import { format, transports, createLogger } from "winston";
 const { combine, timestamp, printf, colorize } = format;
 
