@@ -1,4 +1,6 @@
-import { body, param } from "express-validator";
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const { body, param } = require("express-validator");
 import mongoose, { Types } from "mongoose";
 
 export const createCaseValidator = [

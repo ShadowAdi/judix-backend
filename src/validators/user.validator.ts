@@ -1,4 +1,6 @@
-import { body } from "express-validator";
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const { body } = require("express-validator");
 
 export const createUserValidator = [
     body("username")

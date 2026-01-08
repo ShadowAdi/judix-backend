@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { validationResult } from "express-validator";
-import type { ValidationError } from "express-validator";
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const { validationResult } = require("express-validator");
+interface ValidationError {
+  param: string;
+  msg: string;
+}
 
 export const validate = (
   req: Request,
