@@ -7,7 +7,7 @@ export const CorsConfig = (app: Express) => {
   try {
     app.use(
       cors({
-        origin: "*",
+        origin: CLIENT_URL,
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"],
       })
